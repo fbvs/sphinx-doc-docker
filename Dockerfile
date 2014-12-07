@@ -1,13 +1,28 @@
-FROM  debian:latest
+FROM debian:latest
 
-RUN   apt-get update
+ENV DEBIAN_FRONTEND noninteractive
+RUN apt-get update && \
+    apt-get install -y \
+        python-pip \
+        python-dev \
+        texlive \
+        texlive-latex-recommended \
+        texlive-latex-extra \
+        texlive-fonts-recommended \
+        texlive-base \
+    && apt-get remove -y \
+        texlive-fonts-recommended-doc \
+        texlive-latex-base-doc \
+        texlive-latex-extra-doc \
+        texlive-latex-recommended-doc \
+        texlive-pictures-doc \
+        texlive-pstricks-doc \
+    && apt-get clean
 
-RUN   DEBIAN_FRONTEND=noninteractive apt-get install -y python-pip 
-RUN   DEBIAN_FRONTEND=noninteractive apt-get install -y texlive texlive-latex-recommended texlive-latex-extra texlive-fonts-recommended
+RUN pip install \
+    sphinx \
+    sphinx_rtd_theme \
+    sphinx_bootstrap_theme \
+    alabaster
 
-RUN   pip install Sphinx==1.2.2
-RUN   pip install sphinx_rtd_theme
-RUN   pip install alabaster 
-RUN   pip install sphinx_bootstrap_theme
-
-CMD ["/bin/bash"] 
+ENTRYPOINT ["/bin/bash"]
